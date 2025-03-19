@@ -42,3 +42,24 @@ class DoctorRegistration:  # Renamed to avoid conflict
             "Phone Number": input('Enter your phone number (with country code): '),
             "Home Address": input('Enter your home address: ')
         }
+
+def registration(self):
+        new_doctor = Doctor(  # Now this correctly refers to the SQLAlchemy model
+            FIRST_NAME=self.doctors["First Name"],
+            LAST_NAME=self.doctors["Last Name"],
+            SPECIALIZATION=self.doctors["Specialization"],
+            LICENSE=self.doctors["Doctor license"],
+            DATE_OF_BIRTH=self.doctors["Date of Birth"],
+            SEX=self.doctors["Sex"],
+            EMAIL=self.doctors["email"],
+            PHONE_NUMBER=self.doctors["Phone Number"],
+            HOME_ADDRESS=self.doctors["Home Address"]
+        )
+        session.add(new_doctor)
+        session.commit()
+        session.close()
+        print("Doctor registered successfully!")
+
+# Run the registration process
+a_doctor = DoctorRegistration()
+a_doctor.registration()
