@@ -47,15 +47,15 @@ class DoctorRegistration:  # Renamed to avoid conflict
         }
         # Check if the doctor already exists
         existing_doctor = session.query(Doctor).filter_by(
-            FIRST_NAME=doctors["First Name"], 
-            LAST_NAME=doctors["Last Name"], 
+            FIRST_NAME=doctors["First Name"],
+            LAST_NAME=doctors["Last Name"],
             EMAIL=doctors["email"]
             ).first()
 
         if existing_doctor:
             print(f"Doctor {doctors['First Name']} {doctors['Last Name']} ({doctors['email']}) is already registered.")
         return
-        
+
         # New record into the database
         new_doctor = Doctor(
             FIRST_NAME= doctors["First Name"],
@@ -72,8 +72,8 @@ class DoctorRegistration:  # Renamed to avoid conflict
         session.commit()
         session.close()
         print("Doctor registered successfully!")
-    
-    
+
+
     def read_data(self):
         first_name = input("Write the doctor first name\n").upper()
         last_name = input("Write the doctor last name\n").upper()
@@ -83,7 +83,7 @@ class DoctorRegistration:  # Renamed to avoid conflict
         if doctor:
             # Convert SQLAlchemy object to dictionary and exclude private attributes
             doctor_data = {column.name: getattr(doctor, column.name) for column in doctor.__table__.columns}
-        
+
             print("_____________________________________________________________________")
             print("Doctor Information\n")
             print(
@@ -98,10 +98,24 @@ class DoctorRegistration:  # Renamed to avoid conflict
         else:
             print("Doctor not found.")
 
+    def delete_record(self):
+        first_name = input("Enter the first name: ").upper()
+        last_name = input("Enter second name:  ").upper()
+        doctor = session.query(Doctor).filter_by(FIRST_NAME=first_name, LAST_NAME=last_name).first()
+        choice = input("Do you want to delete?  (y or n)").lower()
+        if choice == "y":
+            session.delete(doctor)
+            session.commit()
+            session.close()
+            print(f"Doctor: {first_name} {last_name} deleted successfully")
+        else:
+            print("No information deleted")
 
-
+    def update_record(self):
+        pass
 
 
 a_doc = DoctorRegistration()
-a_doc.registration()
-a_doc.read_data()
+#a_doc.registration()
+#a_doc.read_data()
+a_doc.delete_record()
