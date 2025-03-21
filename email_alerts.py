@@ -5,6 +5,20 @@ from dotenv import load_dotenv
 
 load_dotenv()  # Load environment variables from .env
 
+
+class Notifications:
+    def __init__(self, sender_email, receiver_email, subject, body, to):
+        self.sender_email = sender_email
+        self.receiver_email = receiver_email
+        self.subject = subject
+        self.body = body
+        self.to =  to
+    
+    def email_alert(self):
+        pass
+
+
+
 def email_alert(subject, body, to):
     msg = EmailMessage()
     msg.set_content(body)
