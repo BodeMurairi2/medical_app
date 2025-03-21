@@ -33,21 +33,12 @@ class Notifications:
         try:
             server = smtplib.SMTP("smtp.gmail.com", 587)
             server.starttls()
-            server.login(user, password)
+            server.login(self.sender_email, self.account_password)
             server.send_message(msg)
             server.quit()
-            print(f"Email sent successfully to {to}")
+            print(f"Email sent successfully to {self.to}")
         except Exception as e:
             print(f"Error sending email: {e}")
-
-
-
-
-def email_alert(subject, body, to):
-    msg = EmailMessage()
-    msg.set_content(body)
-    msg['Subject'] = subject
-    msg['To'] = to
 
     
 if __name__ == '__main__':
