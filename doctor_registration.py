@@ -25,6 +25,7 @@ class Doctor(Base):  # SQLAlchemy Model
     EMAIL = Column(String, unique=False)
     PHONE_NUMBER = Column(String, unique=True)
     HOME_ADDRESS = Column(String)
+    IS_EMPLOYED = Column(String)
 
 # Ensure the database table exists
 Base.metadata.create_all(engine)
@@ -43,7 +44,8 @@ class DoctorRegistration:  # Renamed to avoid conflict
             "email": input("Enter your email address: "),
             "Specialization": input("What's your specialization? ").upper(),
             "Phone Number": input('Enter your phone number (with country code): '),
-            "Home Address": input('Enter your home address: ')
+            "Home Address": input('Enter your home address: '),
+            "Is employed": input("Type (yes) if employed or (no) if not").upper()
         }
         # Check if the doctor already exists
         existing_doctor = session.query(Doctor).filter_by(
@@ -54,7 +56,7 @@ class DoctorRegistration:  # Renamed to avoid conflict
 
         if existing_doctor:
             print(f"Doctor {doctors['First Name']} {doctors['Last Name']} ({doctors['email']}) is already registered.")
-        return
+            return
 
         # New record into the database
         new_doctor = Doctor(
@@ -66,7 +68,8 @@ class DoctorRegistration:  # Renamed to avoid conflict
             SEX= doctors["Sex"],
             EMAIL= doctors["email"],
             PHONE_NUMBER= doctors["Phone Number"],
-            HOME_ADDRESS= doctors["Home Address"]
+            HOME_ADDRESS= doctors["Home Address"],
+            IS_EMPLOYED= doctors["Is employed"]
         )
         session.add(new_doctor)
         session.commit()
@@ -93,7 +96,8 @@ class DoctorRegistration:  # Renamed to avoid conflict
                 f"LICENSE: {doctor_data['LICENSE']}\n"
                 f"EMAIL: {doctor_data['EMAIL']}\n"
                 f"PHONE NUMBER: {doctor_data['PHONE_NUMBER']}\n"
-                f"HOME ADDRESS: {doctor_data['HOME_ADDRESS']}"
+                f"HOME ADDRESS: {doctor_data['HOME_ADDRESS']}\n"
+                f"IS EMPLOYED: {doctor_data["IS_EMPLOYED"]}"
             )
         else:
             print("Doctor not found.")
@@ -111,8 +115,10 @@ class DoctorRegistration:  # Renamed to avoid conflict
         else:
             print("No information deleted")
 
-    def update_record(self):
+class Update_record(DoctorRegistration):
+    def is_retired():
         pass
+
 
 
 a_doc = DoctorRegistration()
