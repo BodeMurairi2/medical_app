@@ -11,9 +11,9 @@ Base = declarative_base()
 Session = sessionmaker(bind=engine)
 session = Session()
 
-#Define models (user/ Tasks)
-class User(Base):
-    _tablename_="users"
+#Define models
+class MedicalTable(Base):
+    _tablename_="medical_record"
     record_id = Column(Integer,primary_key=True, nullable=False)
     patient_id = Column (Integer, ForeignKey=True, nullable=False)
     diagnosis = Column(String)
