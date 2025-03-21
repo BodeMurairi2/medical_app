@@ -115,13 +115,28 @@ class DoctorRegistration:  # Renamed to avoid conflict
         else:
             print("No information deleted")
 
+
 class Update_record(DoctorRegistration):
-    def is_retired():
+    '''
+    Update a record
+    '''
+    def is_retired(self):
+        first_name = input("Enter the first name: ").upper()
+        last_name = input("Enter the second name:  ").upper()
+        age_of_retirement = int(input("Enter the age of retirement"))
+        doctor = session.query(Doctor).filter_by(FIRST_NAME=first_name, LAST_NAME=last_name).first()
+
+        if not doctor:
+            print("Doctor not found.")
+            return
+
+        year = int(doctor.DATE_OF_BIRTH.split("-")[0])
+        if year > age_of_retirement:
+            doctor["IS_EMPLOYED"] = "Retired".upper()
+            session.add(doctor)
+            session.commit()
+            session.close()
+            print("Data updated")
+
+    def is_dead(self):
         pass
-
-
-
-a_doc = DoctorRegistration()
-#a_doc.registration()
-#a_doc.read_data()
-a_doc.delete_record()
