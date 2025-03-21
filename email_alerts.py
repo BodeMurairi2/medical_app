@@ -3,31 +3,32 @@ import smtplib
 from email.message import EmailMessage
 from dotenv import load_dotenv
 
-load_dotenv()  # Load environment variables from .env
+# Load environment variables from .env file
+load_dotenv()
 
+# Debugging: Print to check if variables are loaded correctly
+print("Sender Email:", os.getenv("sender"))
+print("Password:", os.getenv("password"))
+print("Receiver Email:", os.getenv("receiver"))
 
 class Notifications:
-    def __init__(self, sender_email, receiver_email, password, subject, body, to):
+    def __init__(self, sender_email, receiver_email, password, subject, body):
         self.sender_email = sender_email
         self.receiver_email = receiver_email
         self.account_password = password
         self.subject = subject
         self.body = body
-        self.to =  to
     
     def email_alert(self):
         msg = EmailMessage()
         msg.set_content(self.body)
         msg['Subject'] = self.subject
-        msg['To'] = self.to
+        msg['To'] = self.receiver_email
+        msg['From'] = self.sender_email  # FIXED: Use sender email here
 
-        # Get credentials from environment variables
-        self.sender_email = os.getenv("EMAIL_USER")
-        self.account_password = os.getenv("EMAIL_PASS")
-        msg['From'] = self.account_password
-
+        # Ensure credentials are set
         if not self.sender_email or not self.account_password:
-            raise ValueError("Email credentials are missing. Set EMAIL_USER and EMAIL_PASS as environment variables.")
+            raise ValueError("Email credentials are missing. Check your .env file.")
 
         # Send email
         try:
@@ -36,10 +37,16 @@ class Notifications:
             server.login(self.sender_email, self.account_password)
             server.send_message(msg)
             server.quit()
-            print(f"Email sent successfully to {self.to}")
+            print(f"✅ Email sent successfully to {self.receiver_email}")
         except Exception as e:
-            print(f"Error sending email: {e}")
+            print(f"X Error sending email: {e}")
 
-    
 if __name__ == '__main__':
-    email_alert("Medical record", "Attached is the medical report", "f.irakoze2@alustudent.com")
+    notification = Notifications(
+        sender_email=os.getenv("sender"),
+        receiver_email=os.getenv("receiver"),
+        password=os.getenv("password"),
+        subject="Medical record",
+        body="Attached is the medical report"
+    )
+    notification.email_alert()
