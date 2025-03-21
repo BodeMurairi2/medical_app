@@ -118,9 +118,12 @@ class DoctorRegistration:  # Renamed to avoid conflict
 
 class Update_record(DoctorRegistration):
     '''
-    Update a record
+        Update a record
     '''
     def is_retired(self):
+        '''
+            Change to retired if doctor is retired
+        '''
         first_name = input("Enter the first name: ").upper()
         last_name = input("Enter the second name:  ").upper()
         age_of_retirement = int(input("Enter the age of retirement"))
@@ -139,4 +142,7 @@ class Update_record(DoctorRegistration):
             print("Data updated")
 
     def is_dead(self):
+        '''
+            Is dead
+        '''
         pass
