@@ -31,7 +31,10 @@ Base.metadata.create_all(engine)
 
 class DoctorRegistration:  # Renamed to avoid conflict
     def __init__(self):
-        self.doctors = {
+        pass
+
+    def registration(self):
+        doctors = {
             "First Name": input('Enter your first name: ').upper(),
             "Last Name": input('Enter your second name: ').upper(),
             "Sex": input("Enter your sex (F or M): ").upper(),
@@ -43,23 +46,18 @@ class DoctorRegistration:  # Renamed to avoid conflict
             "Home Address": input('Enter your home address: ')
         }
 
-def registration(self):
         new_doctor = Doctor(  # Now this correctly refers to the SQLAlchemy model
-            FIRST_NAME=self.doctors["First Name"],
-            LAST_NAME=self.doctors["Last Name"],
-            SPECIALIZATION=self.doctors["Specialization"],
-            LICENSE=self.doctors["Doctor license"],
-            DATE_OF_BIRTH=self.doctors["Date of Birth"],
-            SEX=self.doctors["Sex"],
-            EMAIL=self.doctors["email"],
-            PHONE_NUMBER=self.doctors["Phone Number"],
-            HOME_ADDRESS=self.doctors["Home Address"]
+            FIRST_NAME= doctors["First Name"],
+            LAST_NAME= doctors["Last Name"],
+            SPECIALIZATION= doctors["Specialization"],
+            LICENSE= doctors["Doctor license"],
+            DATE_OF_BIRTH= doctors["Date of Birth"],
+            SEX= doctors["Sex"],
+            EMAIL= doctors["email"],
+            PHONE_NUMBER= doctors["Phone Number"],
+            HOME_ADDRESS= doctors["Home Address"]
         )
         session.add(new_doctor)
         session.commit()
         session.close()
         print("Doctor registered successfully!")
-
-# Run the registration process
-a_doctor = DoctorRegistration()
-a_doctor.registration()
