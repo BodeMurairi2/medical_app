@@ -1,14 +1,12 @@
 #!/usr/bin/env python3
-from sqlalchemy import create_engine, Column, Integer, String
-from sqlalchemy.orm import declarative_base
-from sqlalchemy.orm import sessionmaker
 from datetime import datetime
+from sqlalchemy import create_engine, Column, Integer, String
+from sqlalchemy.orm import declarative_base, sessionmaker
 
 # Define the database URL
 DATABASE_URL = "sqlite:///doctors_data.db"
 engine = create_engine(DATABASE_URL)
 Session = sessionmaker(bind=engine)
-session = Session()
 
 # Define the ORM Model
 Base = declarative_base()
@@ -30,63 +28,47 @@ class Doctor(Base):  # SQLAlchemy Model
 # Ensure the database table exists
 Base.metadata.create_all(engine)
 
-class DoctorRegistration:  # Renamed to avoid conflict
-    def __init__(self):
-        pass
-
+class DoctorRegistration:
     def registration(self):
+        session = Session()
         doctors = {
             "First Name": input('Enter your first name: ').upper(),
             "Last Name": input('Enter your second name: ').upper(),
             "Sex": input("Enter your sex (F or M): ").upper(),
-            "Date of Birth": input("Enter your date of birth in yy-mm-dd: "),
+            "Date of Birth": input("Enter your date of birth in yyyy-mm-dd: "),
             "Doctor license": input("Enter your license: ").upper(),
             "email": input("Enter your email address: "),
             "Specialization": input("What's your specialization? ").upper(),
             "Phone Number": input('Enter your phone number (with country code): '),
             "Home Address": input('Enter your home address: '),
-            "Is employed": input("Type (yes) if employed or (no) if not").upper()
+            "Is employed": input("Type (yes) if employed or (no) if not: ").upper()
         }
-        # Check if the doctor already exists
         existing_doctor = session.query(Doctor).filter_by(
             FIRST_NAME=doctors["First Name"],
             LAST_NAME=doctors["Last Name"],
             EMAIL=doctors["email"]
-            ).first()
-
+        ).first()
+        
         if existing_doctor:
             print(f"Doctor {doctors['First Name']} {doctors['Last Name']} ({doctors['email']}) is already registered.")
+            session.close()
             return
-
-        # New record into the database
-        new_doctor = Doctor(
-            FIRST_NAME= doctors["First Name"],
-            LAST_NAME= doctors["Last Name"],
-            SPECIALIZATION= doctors["Specialization"],
-            LICENSE= doctors["Doctor license"],
-            DATE_OF_BIRTH= doctors["Date of Birth"],
-            SEX= doctors["Sex"],
-            EMAIL= doctors["email"],
-            PHONE_NUMBER= doctors["Phone Number"],
-            HOME_ADDRESS= doctors["Home Address"],
-            IS_EMPLOYED= doctors["Is employed"]
-        )
+        
+        new_doctor = Doctor(**doctors)
         session.add(new_doctor)
         session.commit()
         session.close()
         print("Doctor registered successfully!")
 
-
     def read_data(self):
-        first_name = input("Write the doctor first name\n").upper()
-        last_name = input("Write the doctor last name\n").upper()
+        session = Session()
+        first_name = input("Write the doctor's first name: ").upper()
+        last_name = input("Write the doctor's last name: ").upper()
 
         doctor = session.query(Doctor).filter_by(FIRST_NAME=first_name, LAST_NAME=last_name).first()
-
+        
         if doctor:
-            # Convert SQLAlchemy object to dictionary and exclude private attributes
             doctor_data = {column.name: getattr(doctor, column.name) for column in doctor.__table__.columns}
-
             print("_____________________________________________________________________")
             print("Doctor Information\n")
             print(
@@ -97,52 +79,92 @@ class DoctorRegistration:  # Renamed to avoid conflict
                 f"EMAIL: {doctor_data['EMAIL']}\n"
                 f"PHONE NUMBER: {doctor_data['PHONE_NUMBER']}\n"
                 f"HOME ADDRESS: {doctor_data['HOME_ADDRESS']}\n"
-                f"IS EMPLOYED: {doctor_data["IS_EMPLOYED"]}"
+                f"IS EMPLOYED: {doctor_data['IS_EMPLOYED']}"
             )
         else:
             print("Doctor not found.")
+        session.close()
 
     def delete_record(self):
+        session = Session()
         first_name = input("Enter the first name: ").upper()
         last_name = input("Enter second name:  ").upper()
         doctor = session.query(Doctor).filter_by(FIRST_NAME=first_name, LAST_NAME=last_name).first()
-        choice = input("Do you want to delete?  (y or n)").lower()
+        
+        if not doctor:
+            print("Doctor not found.")
+            session.close()
+            return
+        
+        choice = input("Do you want to delete? (y or n): ").lower()
         if choice == "y":
             session.delete(doctor)
             session.commit()
-            session.close()
             print(f"Doctor: {first_name} {last_name} deleted successfully")
         else:
-            print("No information deleted")
+            print("No information deleted.")
+        session.close()
 
-
-class Update_record(DoctorRegistration):
-    '''
-        Update a record
-    '''
+class UpdateRecord(DoctorRegistration):
     def is_retired(self):
-        '''
-            Change to retired if doctor is retired
-        '''
+        session = Session()
         first_name = input("Enter the first name: ").upper()
-        last_name = input("Enter the second name:  ").upper()
-        age_of_retirement = int(input("Enter the age of retirement"))
-        doctor = session.query(Doctor).filter_by(FIRST_NAME=first_name, LAST_NAME=last_name).first()
+        last_name = input("Enter the second name: ").upper()
+        age_of_retirement = int(input("Enter the age of retirement: "))
+        current_year = datetime.now().year
 
+        doctor = session.query(Doctor).filter_by(FIRST_NAME=first_name, LAST_NAME=last_name).first()
+        
         if not doctor:
             print("Doctor not found.")
-            return
-
-        year = int(doctor.DATE_OF_BIRTH.split("-")[0])
-        if year > age_of_retirement:
-            doctor["IS_EMPLOYED"] = "Retired".upper()
-            session.add(doctor)
-            session.commit()
             session.close()
-            print("Data updated")
+            return
+        
+        birth_year = int(doctor.DATE_OF_BIRTH.split("-")[0])
+        if (current_year - birth_year) > age_of_retirement:
+            doctor.IS_EMPLOYED = "RETIRED"
+            session.commit()
+            print(f"Data updated\nDoctor: {doctor.FIRST_NAME} {doctor.LAST_NAME} is retired")
+        else:
+            print("No change.")
+        session.close()
 
     def is_dead(self):
-        '''
-            Is dead
-        '''
-        pass
+        session = Session()
+        first_name = input("Enter the first name: ").upper()
+        last_name = input("Enter the second name: ").upper()
+        doctor = session.query(Doctor).filter_by(FIRST_NAME=first_name, LAST_NAME=last_name).first()
+        
+        if not doctor:
+            print("Doctor not found.")
+            session.close()
+            return
+        
+        doctor.IS_EMPLOYED = "DEAD"
+        session.commit()
+        print("Data updated.")
+        session.close()
+
+    def detail_changed(self):
+        session = Session()
+        first_name = input("Enter the first name: ").upper()
+        last_name = input("Enter the second name: ").upper()
+        doctor = session.query(Doctor).filter_by(FIRST_NAME=first_name, LAST_NAME=last_name).first()
+        
+        if not doctor:
+            print("Doctor not found.")
+            session.close()
+            return
+
+        user_choice = input("What do you want to update (phone number, home address, email): ").upper()
+        if user_choice == "PHONE NUMBER":
+            doctor.PHONE_NUMBER = input("Insert new phone number: ")
+        elif user_choice == "HOME ADDRESS": 
+            doctor.HOME_ADDRESS = input("Insert updated Home Address: ")
+        elif user_choice == "EMAIL":
+            doctor.EMAIL = input("Insert new email address: ")
+        else:
+            print("No change.")
+        
+        session.commit()
+        session.close()
