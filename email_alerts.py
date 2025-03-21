@@ -7,9 +7,10 @@ load_dotenv()  # Load environment variables from .env
 
 
 class Notifications:
-    def __init__(self, sender_email, receiver_email, subject, body, to):
+    def __init__(self, sender_email, receiver_email, password, subject, body, to):
         self.sender_email = sender_email
         self.receiver_email = receiver_email
+        self.account_password = password
         self.subject = subject
         self.body = body
         self.to =  to
@@ -21,11 +22,11 @@ class Notifications:
         msg['To'] = self.to
 
         # Get credentials from environment variables
-        user = os.getenv("EMAIL_USER")
-        password = os.getenv("EMAIL_PASS")
-        msg['From'] = user
+        self.sender_email = os.getenv("EMAIL_USER")
+        self.account_password = os.getenv("EMAIL_PASS")
+        msg['From'] = self.account_password
 
-        if not user or not password:
+        if not self.sender_email or not self.account_password:
             raise ValueError("Email credentials are missing. Set EMAIL_USER and EMAIL_PASS as environment variables.")
 
         # Send email
