@@ -36,3 +36,14 @@ class Authentication:
             "Hospital Email Address": input("Enter hospital email"),
             "Hospital Password": input("Enter hospital password")
         }
+        hospital_credentials = LoginDetails(
+            hospital_name = hospital_details["Hospital Name"],
+            hospital_email = hospital_details["Hospital Email Address"],
+            hospital_password = hash_password(hospital_details["Hospital Password"], 
+                                              method='scrypt',
+                                              salt_length=16)
+        )
+        session.add(hospital_credentials)
+        session.commit()
+        session.close()
+        print("Hospital registered successfully")
