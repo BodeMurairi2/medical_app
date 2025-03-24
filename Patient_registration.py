@@ -56,3 +56,21 @@ class PatientRegistration:
             dob=datetime.strptime(dob, "%Y-%m-%d").date(),  # Convert to date
             registration_date=registration_date
         )
+
+        # Check for existing patient
+        existing_patient = session.query(Patient).filter_by(
+            first_name=first_name,
+            last_name=last_name,
+            email=email
+        ).first()
+
+        if existing_patient:
+            print(f"Patient {first_name} {last_name} ({email}) is already registered.")
+            session.close()
+            return
+
+        session.add(new_patient)
+        session.commit()
+        session.close()
+        print("Patient registered successfully!")
+
