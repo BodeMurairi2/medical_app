@@ -99,3 +99,15 @@ class PatientRegistration:
         else:
             print("Patient not found.")
         session.close()
+
+        def delete_patient(self):
+        session = Session()
+        first_name = input("Enter the patient's first name: ")
+        last_name = input("Enter the patient's last name: ")
+        patient = session.query(Patient).filter_by(first_name=first_name, last_name=last_name).first()
+        
+        if not patient:
+            print("Patient not found.")
+            session.close()
+            return
+            
