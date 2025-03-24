@@ -110,4 +110,14 @@ class PatientRegistration:
             print("Patient not found.")
             session.close()
             return
-            
+
+            choice = input("Do you want to delete? (y or n): ").lower()
+        if choice == "y":
+            session.delete(patient)
+            session.commit()
+            print(f"Patient: {first_name} {last_name} deleted successfully.")
+        else:
+            print("No information deleted.")
+        session.close()
+
+
