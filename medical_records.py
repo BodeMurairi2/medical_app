@@ -55,7 +55,7 @@ def add_medical_records():
         prescription=prescription,
         doctor_name=doctor_name
     )
-<<<<<<< HEAD
+
 
     try:
         session.add(new_record)
@@ -78,7 +78,7 @@ def read_medical_record():
 
     if record:
         print("____________________________________________________________")
-        print("Medical Record:"\n)
+        print("Medical Record:")
         print(
             f"Record ID: {record.record_id}\n"
             f"Patient ID: {record.patient_id}\n"
@@ -93,17 +93,3 @@ def read_medical_record():
     session.close()
 
 read_medical_record()
-=======
-
-    try:
-        session.add(new_record)
-        session.commit()
-        print("Record added successfuly")
-
-    except Exception as e:
-        session.rollback()
-        print(f"Database error {e}")
-    session.close()
-
-add_medical_records()
->>>>>>> 29bd9c6066c86f812aa5d0e2563b930b8143b1d3
