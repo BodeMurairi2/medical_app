@@ -24,3 +24,21 @@ class Patient(Base):  # SQLAlchemy Model
     phone = Column(String, nullable=False)
     dob = Column(Date, nullable=False)
     registration_date = Column(Date, nullable=False)
+
+    # Ensure the database table exists
+Base.metadata.create_all(engine)
+
+class PatientRegistration:
+    def register_patient(self):
+        session = Session()
+        print("Enter patient details:")
+        first_name = input("First Name: ")
+        last_name = input("Last Name: ")
+        middle_name = input("Middle Name (optional): ")
+        address = input("Address: ")
+        national_id = input("National ID or Passport ID: ")
+        email = input("Email Address: ")
+        gender = input("Gender: ")
+        phone = input("Phone Number: ")
+        dob = input("Date of Birth (YYYY-MM-DD): ")
+        registration_date = datetime.now().date()  # Use date directly
