@@ -42,3 +42,17 @@ class PatientRegistration:
         phone = input("Phone Number: ")
         dob = input("Date of Birth (YYYY-MM-DD): ")
         registration_date = datetime.now().date()  # Use date directly
+
+        # Create a Patient instance
+        new_patient = Patient(
+            first_name=first_name,
+            last_name=last_name,
+            middle_name=middle_name,
+            address=address,
+            national_id=national_id,
+            email=email,
+            gender=gender,
+            phone=phone,
+            dob=datetime.strptime(dob, "%Y-%m-%d").date(),  # Convert to date
+            registration_date=registration_date
+        )
