@@ -74,3 +74,28 @@ class PatientRegistration:
         session.close()
         print("Patient registered successfully!")
 
+        def read_patient(self):
+        session = Session()
+        first_name = input("Enter the patient's first name: ")
+        last_name = input("Enter the patient's last name: ")
+
+        patient = session.query(Patient).filter_by(first_name=first_name, last_name=last_name).first()
+        
+        if patient:
+            print("_____________________________________________________________________")
+            print("Patient Information\n")
+            print(
+                f"FIRST NAME: {patient.first_name}\n"
+                f"LAST NAME: {patient.last_name}\n"
+                f"MIDDLE NAME: {patient.middle_name}\n"
+                f"ADDRESS: {patient.address}\n"
+                f"NATIONAL ID: {patient.national_id}\n"
+                f"EMAIL: {patient.email}\n"
+                f"GENDER: {patient.gender}\n"
+                f"PHONE: {patient.phone}\n"
+                f"DOB: {patient.dob}\n"
+                f"REGISTRATION DATE: {patient.registration_date}"
+            )
+        else:
+            print("Patient not found.")
+        session.close()
