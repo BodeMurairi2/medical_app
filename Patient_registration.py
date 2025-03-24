@@ -120,4 +120,27 @@ class PatientRegistration:
             print("No information deleted.")
         session.close()
 
+        def main():
+    while True:
+        print("\nHospital Registration System")
+        print("1. Register Patient")
+        print("2. Read Patient Data")
+        print("3. Delete Patient")
+        print("4. Exit")
+        choice = input("Choose an option: ")
 
+        registration_system = PatientRegistration()
+
+        if choice == '1':
+            registration_system.register_patient()
+        elif choice == '2':
+            registration_system.read_patient()
+        elif choice == '3':
+            registration_system.delete_patient()
+        elif choice == '4':
+            break
+        else:
+            print("Invalid choice. Please try again.")
+
+if __name__ == "__main__":
+    main()
