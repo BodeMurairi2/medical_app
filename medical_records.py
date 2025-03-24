@@ -26,7 +26,13 @@ class MedicalTable(Base):
 Base.metadata.create_all(engine)
 
 # A function to add data to the table
-
+# class MedicalData:
+#     def __init__(self, patient_id, diagnosis, prescription, doctor_name):
+#         self.patient_id = patient_id
+#         self.diagnosis = diagnosis
+#         self.prescription = prescription
+#         self.doctor_name = doctor_name
+        
 def add_medical_records():
     patient_id = input("Enter the patient ID: ").strip()
     diagnosis = input("Enter the diagnosis: ").strip()
@@ -58,4 +64,6 @@ def add_medical_records():
     except Exception as e:
         session.rollback()
         print(f"Database error {e}")
+    session.close()
 
+add_medical_records()
