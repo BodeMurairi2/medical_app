@@ -1,7 +1,8 @@
 #!/usr/bin/env python 3
-from medical_records import MedicalTable, add_medical_record, read_medical_record
-from doctor_registration import DoctorRegistration, UpdateRecord
+from medical_records import add_medical_records, read_medical_record
 from Patient_registration import PatientRegistration
+from doctor_registration import DoctorRegistration, UpdateRecord
+
 
 def main():
     while True:
@@ -15,3 +16,7 @@ def main():
         print("7. Read a medical record")
         
         choice = input("Enter the option: ")
+    
+
+    if __name__ == "__main__":
+        main()
