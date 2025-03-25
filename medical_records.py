@@ -68,6 +68,7 @@ def add_medical_records():
 
 add_medical_records()
 
+# A function to read data from the medical records table
 
 def read_medical_record():
     session = Session() 
