@@ -68,3 +68,29 @@ def add_medical_records():
     session.close()
 
 add_medical_records()
+
+# A function to read data from the medical records table
+
+def read_medical_record():
+    session = Session() 
+    patient_id = input("Enter patient_id: ")
+    
+    record = session.query(MedicalTable).filter_by(patient_id = patient_id).first()
+
+    if record:
+        print("____________________________________________________________")
+        print("Medical Record:")
+        print(
+            f"Record ID: {record.record_id}\n"
+            f"Patient ID: {record.patient_id}\n"
+            f"Diagnosis: {record.diagnosis}\n"
+            f"Prescription: {record.prescription}\n"
+            f"Doctor Name: {record.doctor_name}\n"
+            f"Date: {record.date}"
+
+        )
+    else:
+        print("Record not found")
+    session.close()
+
+read_medical_record()
