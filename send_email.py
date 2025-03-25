@@ -52,4 +52,8 @@ class Send_email:
 # Run the script
 if __name__ == "__main__":
     send_email = Send_email(sender_email, receiver_email, password, subject, body)
+<<<<<<< HEAD
     send_email.send_email() 
+=======
+    send_email.send_email()
+>>>>>>> feature-doc
