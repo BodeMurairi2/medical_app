@@ -2,6 +2,7 @@ import os
 import smtplib
 from email.message import EmailMessage
 from dotenv import load_dotenv
+from hospital import Patient, MedicalRecord
 
 # Load environment variables from .env file
 load_dotenv()
