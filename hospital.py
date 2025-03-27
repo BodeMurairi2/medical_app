@@ -3,7 +3,8 @@
 from sqlalchemy import create_engine, Column, String, Integer, ForeignKey, Date, DateTime
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from sqlalchemy.exc import IntegrityError
-from datetime import datetime, timezone
+from datetime import datetime, timezone 
+import uuid
 
 # Define the database URL
 DATABASE_URL = "sqlite:///hospital.db"
@@ -38,7 +39,7 @@ class MedicalRecord(Base):
     prescription = Column(String)
     doctor_name = Column(String, nullable=False)
     exam_name = Column(String, nullable=False)
-    exam_order = Column(String, nullable=False)
+    exam_no = Column(String, nullable=False)
     date = Column(DateTime, default=lambda: datetime.now(timezone.utc))
 
     # Relationship to the Patient table
@@ -80,7 +81,7 @@ class PatientRegistration:
             registration_date=registration_date
         )
 
-         # Check for existing patient
+        # Check for existing patient
         existing_patient = session.query(Patient).filter_by(
             first_name=first_name,
             last_name=last_name,
@@ -151,11 +152,12 @@ class MedicalRecordManagement:
         prescription = input("Enter the prescription: ").strip()
         doctor_name = input("Enter the doctor's name: ").strip()
         exam_name = input("Enter the exam name: ").strip()
-        exam_order = input("Enter the exam order: ").strip()
+        exam_no = str(uuid.uuid4()).split('-')[0]
 
-        if not diagnosis or not prescription or not doctor_name or not exam_name or not exam_order:
-            print("ERROR! All fields are required.")
-            return
+        if not diagnosis or not prescription or not doctor_name or not exam_name or not exam_no:
+            print("Error! All the fields should not be empty")
+            return 
+
 
         new_record = MedicalRecord(
             patient_id=patient.id,
@@ -163,7 +165,7 @@ class MedicalRecordManagement:
             prescription=prescription,
             doctor_name=doctor_name,
             exam_name=exam_name,
-            exam_order=exam_order
+            exam_no=exam_no
         )
 
         try:
@@ -182,7 +184,7 @@ class MedicalRecordManagement:
         first_name = input("Enter the patient's first name: ").strip().upper()
         last_name = input("Enter the patient's last name: ").strip().upper()
 
-         # Find the patient by name
+        # Find the patient by name
         patient = session.query(Patient).filter_by(first_name=first_name, last_name=last_name).first()
 
         if not patient:
@@ -201,7 +203,7 @@ class MedicalRecordManagement:
                 f"Prescription: {record.prescription}\n"
                 f"Doctor Name: {record.doctor_name}\n"
                 f"Exam Name: {record.exam_name}\n"
-                f"Exam Order: {record.exam_order}\n"
+                f"Exam Order: {record.exam_no}\n"
                 f"Date: {record.date}"
             )
         else:
