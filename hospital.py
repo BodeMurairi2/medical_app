@@ -181,3 +181,33 @@ class MedicalRecordManagement:
         session = Session()
         first_name = input("Enter the patient's first name: ").strip().upper()
         last_name = input("Enter the patient's last name: ").strip().upper()
+
+         # Find the patient by name
+        patient = session.query(Patient).filter_by(first_name=first_name, last_name=last_name).first()
+
+        if not patient:
+            print("ERROR! Patient not found. Please ensure the patient's details are correct.")
+            return
+
+        record = session.query(MedicalRecord).filter_by(patient_id=patient.id).first()
+
+        if record:
+            print("____________________________________________________________")
+            print("Medical Record:")
+            print(
+                f"Record ID: {record.id}\n"
+                f"Patient ID: {record.patient_id}\n"
+                f"Diagnosis: {record.diagnosis}\n"
+                f"Prescription: {record.prescription}\n"
+                f"Doctor Name: {record.doctor_name}\n"
+                f"Exam Name: {record.exam_name}\n"
+                f"Exam Order: {record.exam_order}\n"
+                f"Date: {record.date}"
+            )
+        else:
+            print("Record not found.")
+        session.close()
+
+if __name__ == "__main__":
+    patient_registration = PatientRegistration()
+    medical_record_management = MedicalRecordManagement()
