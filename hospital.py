@@ -46,3 +46,36 @@ class MedicalRecord(Base):
 
 # Ensure the database tables exist
 Base.metadata.create_all(engine)
+
+class PatientRegistration:
+    def __init__(self):
+        pass
+
+    def register_patient(self):
+        """Registers a new patient in the database."""
+        session = Session()
+        print("Enter patient details:")
+        first_name = input("First Name: ").upper()
+        last_name = input("Last Name: ").upper()
+        middle_name = input("Middle Name (optional): ").upper()
+        address = input("Address: ")
+        national_id = input("National ID or Passport ID: ")
+        email = input("Email Address: ")
+        gender = input("Gender: ")
+        phone = input("Phone Number: ")
+        dob = input("Date of Birth (YYYY-MM-DD): ")
+        registration_date = datetime.now().date()  # Use date directly
+
+        # Create a Patient instance
+        new_patient = Patient(
+            first_name=first_name,
+            last_name=last_name,
+            middle_name=middle_name,
+            address=address,
+            national_id=national_id,
+            email=email,
+            gender=gender,
+            phone=phone,
+            dob=datetime.strptime(dob, "%Y-%m-%d").date(),  # Convert to date
+            registration_date=registration_date
+        )
