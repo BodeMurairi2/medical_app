@@ -79,3 +79,105 @@ class PatientRegistration:
             dob=datetime.strptime(dob, "%Y-%m-%d").date(),  # Convert to date
             registration_date=registration_date
         )
+
+         # Check for existing patient
+        existing_patient = session.query(Patient).filter_by(
+            first_name=first_name,
+            last_name=last_name,
+            email=email
+        ).first()
+
+        if existing_patient:
+            print(f"Patient {first_name} {last_name} ({email}) is already registered.")
+            session.close()
+            return
+
+        try:
+            session.add(new_patient)
+            session.commit()
+            print("Patient registered successfully!")
+        except IntegrityError:
+            session.rollback()
+            print("Error: Unable to register patient.")
+        finally:
+            session.close()
+
+    def read_patient(self):
+        """Reads and displays patient information from the database."""
+        session = Session()
+        first_name = input("Enter the patient's first name: ").upper()
+        last_name = input("Enter the patient's last name: ").upper()
+
+        patient = session.query(Patient).filter_by(first_name=first_name, last_name=last_name).first()
+
+        if patient:
+            print("_____________________________________________________________________")
+            print("Patient Information\n")
+            print(
+                f"FIRST NAME: {patient.first_name}\n"
+                f"LAST NAME: {patient.last_name}\n"
+                f"MIDDLE NAME: {patient.middle_name}\n"
+                f"ADDRESS: {patient.address}\n"
+                f"NATIONAL ID: {patient.national_id}\n"
+                f"EMAIL: {patient.email}\n"
+                f"GENDER: {patient.gender}\n"
+                f"PHONE: {patient.phone}\n"
+                f"DOB: {patient.dob}\n"
+                f"REGISTRATION DATE: {patient.registration_date}"
+            )
+        else:
+            print("Patient not found.")
+        session.close()
+
+
+class MedicalRecordManagement:
+    def __init__(self):
+        pass
+
+    def add_medical_record(self):
+        """Adds a new medical record to the database."""
+        session = Session()
+        first_name = input("Enter the patient's first name: ").strip().upper()
+        last_name = input("Enter the patient's last name: ").strip().upper()
+
+        # Find the patient by name
+        patient = session.query(Patient).filter_by(first_name=first_name, last_name=last_name).first()
+
+        if not patient:
+            print("ERROR! Patient not found. Please ensure the patient's details are correct.")
+            return
+
+        diagnosis = input("Enter the diagnosis: ").strip()
+        prescription = input("Enter the prescription: ").strip()
+        doctor_name = input("Enter the doctor's name: ").strip()
+        exam_name = input("Enter the exam name: ").strip()
+        exam_order = input("Enter the exam order: ").strip()
+
+        if not diagnosis or not prescription or not doctor_name or not exam_name or not exam_order:
+            print("ERROR! All fields are required.")
+            return
+
+        new_record = MedicalRecord(
+            patient_id=patient.id,
+            diagnosis=diagnosis,
+            prescription=prescription,
+            doctor_name=doctor_name,
+            exam_name=exam_name,
+            exam_order=exam_order
+        )
+
+        try:
+            session.add(new_record)
+            session.commit()
+            print("Medical record added successfully.")
+        except IntegrityError:
+            session.rollback()
+            print("Error: Unable to add medical record.")
+        finally:
+            session.close()
+
+    def read_medical_record(self):
+        """Reads and displays a medical record from the database."""
+        session = Session()
+        first_name = input("Enter the patient's first name: ").strip().upper()
+        last_name = input("Enter the patient's last name: ").strip().upper()
