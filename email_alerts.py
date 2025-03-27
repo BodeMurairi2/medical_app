@@ -12,6 +12,12 @@ print("Sender Email:", os.getenv("sender"))
 print("Password:", os.getenv("password"))
 print("Receiver Email:", os.getenv("receiver"))
 
+patient = Patient()
+medical_record = MedicalRecord()
+
+
+
+
 class Notifications:
     def __init__(self, sender_email, receiver_email, password, subject, body):
         self.sender_email = sender_email
@@ -77,3 +83,4 @@ if __name__ == '__main__':
         body="Attached is the medical report"
     )
     notification.email_alert()
+

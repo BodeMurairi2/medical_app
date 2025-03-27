@@ -1,4 +1,5 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
+
 from datetime import datetime
 from sqlalchemy import create_engine, Column, Integer, String
 from sqlalchemy.orm import declarative_base, sessionmaker
@@ -32,25 +33,26 @@ class DoctorRegistration:
     def registration(self):
         session = Session()
         doctors = {
-            "First Name": input('Enter your first name: ').upper(),
-            "Last Name": input('Enter your second name: ').upper(),
-            "Sex": input("Enter your sex (F or M): ").upper(),
-            "Date of Birth": input("Enter your date of birth in yyyy-mm-dd: "),
-            "Doctor license": input("Enter your license: ").upper(),
-            "email": input("Enter your email address: "),
-            "Specialization": input("What's your specialization? ").upper(),
-            "Phone Number": input('Enter your phone number (with country code): '),
-            "Home Address": input('Enter your home address: '),
-            "Is employed": input("Type (yes) if employed or (no) if not: ").upper()
+            "FIRST_NAME": input('Enter your first name: ').upper(),
+            "LAST_NAME": input('Enter your second name: ').upper(),
+            "SEX": input("Enter your sex (F or M): ").upper(),
+            "DATE_OF_BIRTH": input("Enter your date of birth in yyyy-mm-dd: "),
+            "LICENSE": input("Enter your license: ").upper(),
+            "EMAIL": input("Enter your email address: "),
+            "SPECIALIZATION": input("What's your specialization? ").upper(),
+            "PHONE_NUMBER": input('Enter your phone number (with country code): '),
+            "HOME_ADDRESS": input('Enter your home address: '),
+            "IS_EMPLOYED": input("Type (yes) if employed or (no) if not: ").upper()
         }
+        
         existing_doctor = session.query(Doctor).filter_by(
-            FIRST_NAME=doctors["First Name"],
-            LAST_NAME=doctors["Last Name"],
-            EMAIL=doctors["email"]
+            FIRST_NAME=doctors["FIRST_NAME"],
+            LAST_NAME=doctors["LAST_NAME"],
+            EMAIL=doctors["EMAIL"]
         ).first()
         
         if existing_doctor:
-            print(f"Doctor {doctors['First Name']} {doctors['Last Name']} ({doctors['email']}) is already registered.")
+            print(f"Doctor {doctors['FIRST_NAME']} {doctors['LAST_NAME']} ({doctors['EMAIL']}) is already registered.")
             session.close()
             return
         
@@ -59,31 +61,6 @@ class DoctorRegistration:
         session.commit()
         session.close()
         print("Doctor registered successfully!")
-
-    def read_data(self):
-        session = Session()
-        first_name = input("Write the doctor's first name: ").upper()
-        last_name = input("Write the doctor's last name: ").upper()
-
-        doctor = session.query(Doctor).filter_by(FIRST_NAME=first_name, LAST_NAME=last_name).first()
-        
-        if doctor:
-            doctor_data = {column.name: getattr(doctor, column.name) for column in doctor.__table__.columns}
-            print("_____________________________________________________________________")
-            print("Doctor Information\n")
-            print(
-                f"FIRST NAME: {doctor_data['FIRST_NAME']}\n"
-                f"LAST NAME: {doctor_data['LAST_NAME']}\n"
-                f"SPECIALIZATION: {doctor_data['SPECIALIZATION']}\n"
-                f"LICENSE: {doctor_data['LICENSE']}\n"
-                f"EMAIL: {doctor_data['EMAIL']}\n"
-                f"PHONE NUMBER: {doctor_data['PHONE_NUMBER']}\n"
-                f"HOME ADDRESS: {doctor_data['HOME_ADDRESS']}\n"
-                f"IS EMPLOYED: {doctor_data['IS_EMPLOYED']}"
-            )
-        else:
-            print("Doctor not found.")
-        session.close()
 
     def delete_record(self):
         session = Session()
@@ -168,3 +145,7 @@ class UpdateRecord(DoctorRegistration):
         
         session.commit()
         session.close()
+
+if __name__ == "__main__":
+    doctor_registration = DoctorRegistration()
+    update_record = UpdateRecord()
