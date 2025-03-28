@@ -20,7 +20,8 @@ def main():
         print("7. Read a medical record")
         print("8. Exit")
 
-          choice = int(input("Enter the option: "))
+        
+        choice = int(input("Enter the option: "))
         if choice == 1 :
             patient_registration.register_patient()
         elif choice == 2:

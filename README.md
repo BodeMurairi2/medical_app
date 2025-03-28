@@ -10,6 +10,12 @@ Features
 - Medical Records Management: Store and retrieve patient diagnoses and prescriptions.
 - Email Notifications: Send email notifications using SMTP.
 
+File Structure
+doctor_registration.py: Handles doctor registration and storage.
+email_alerts.py: Manages email notifications for patients.
+hospital.py: (Referenced but not provided) Likely manages patient and medical record classes.
+.env (Not included in repo): Stores sensitive email credentials.
+
  Project Structure
 ```
 ├── authentication.py      # Handles hospital authentication
@@ -62,6 +68,5 @@ Contributors
 - Bode Murairi (b.murairi@alustudent.com)
 
 
-License
-This project is licensed under the MIT License.
+
 
