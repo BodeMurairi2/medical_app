@@ -29,5 +29,4 @@ Install fpdf (for PDF file generation)
  python3 main.py
 
 
-# Essential Frameworks & Utilities
 
