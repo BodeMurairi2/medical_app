@@ -1,4 +1,33 @@
-hashlib
-getpass
-argparse
-sqlalchemy
+# This file shows all necessary dependencies that was installed when setting up the project.
+
+# project requirements
+
+Install Python
+ Ensure you have Python 3.x installed.
+ To check,run:python --version or python3 --version
+
+Clone the repository
+ git clone https://github.com/BodeMurairi2/medical_app
+   
+Create a Virtual Environment
+ #It is recommended to install project dependencies inside a virtual environment to avoid conflicts.
+ For Windows: python -m venv venv
+ For Linux/Mac: python3 -m venv venv
+
+Activate the Virtual Environment
+For Windows: venv\Scripts\activate
+ For Linux/Mac: source venv/bin/activate
+
+# Required Python Modules
+
+Install SQLAlchemy (for database handling)
+ pip3 install SQLAlchemy
+Install fpdf (for PDF file generation)
+ pip3 install fpdf
+
+ # After installing dependencies, start your project by running:
+ python3 main.py
+
+
+# Essential Frameworks & Utilities
+
