@@ -1,3 +1,6 @@
+#!/usr/bin/env python3
+
+
 import os
 import smtplib
 from sqlalchemy import create_engine
