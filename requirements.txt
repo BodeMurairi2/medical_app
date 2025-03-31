@@ -24,9 +24,15 @@ Install SQLAlchemy (for database handling)
  pip3 install SQLAlchemy
 Install fpdf (for PDF file generation)
  pip3 install fpdf
-
+Install dotenv (for environment variables)
+pip3 install python-dotenv
  # After installing dependencies, start your project by running:
- python3 main.py
+change your directory to the setup directory and run:
+ python3 main.py to add data to the database and read data from the database on windows
+python3 email_alerts.py or python3 send_reminders.py to send reports and reminders
 
-
+On Linux/MacOs
+./main.py or python main.py
+./send_reminders or python send_reminders.py
+./email_alerts.py or python email_alerts.py
 
