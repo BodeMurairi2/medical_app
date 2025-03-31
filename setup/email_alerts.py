@@ -1,6 +1,5 @@
 #!/usr/bin/env python3
 
-
 import os
 import smtplib
 from sqlalchemy import create_engine
@@ -12,7 +11,7 @@ from hospital import Patient, MedicalRecord
 from fpdf import FPDF
 from datetime import datetime
 
-#..........................connecting with the database..............
+# ..........................connecting with the database..............
 
 # Get the directory of the current script
 script_dir = os.path.dirname(__file__)
@@ -27,13 +26,10 @@ DATABASE_URL = f"sqlite:///{os.path.join(instance_dir, 'hospital.db')}"
 # Create SQLAlchemy engines
 engine = create_engine(DATABASE_URL, echo=True)
 
-
 # Create session factories
 SessionLocal1 = sessionmaker(bind=engine)
 
-
 session = SessionLocal1()
-
 
 first_name = input("Enter the patient first name: \n").upper()
 last_name = input("Enter the patient last name: \n").upper()
@@ -52,7 +48,6 @@ else:
 
 # Close sessions
 session.close()
-session.close()
 
 # Load environment variables from .env file
 load_dotenv()
@@ -69,7 +64,7 @@ class Notifications:
         self.subject = subject
         self.body = body
         self.attachment_path = attachment_path
-    
+
     def email_alert(self):
         msg = EmailMessage()
         msg.set_content(self.body)
@@ -85,7 +80,12 @@ class Notifications:
 
         # Ensure credentials are set
         if not self.sender_email or not self.account_password:
-            raise ValueError("Email credentials are missing. Check your .env file.")
+            print("Email credentials are missing. Check your .env file.")
+            return
+
+        if not patient_record:
+            print(f"Patient with name {first_name} {last_name} not in our database: ")
+            return
 
         # Send email
         try:
@@ -97,6 +97,7 @@ class Notifications:
             print(f"✅ Report sent successfully to {self.receiver_email}")
         except Exception as e:
             print(f"X Error sending email: {e}")
+
 
 def create_pdf(patient_record, record, formatted_date):
     pdf = FPDF()
@@ -115,6 +116,7 @@ def create_pdf(patient_record, record, formatted_date):
     pdf_output_path = os.path.join(instance_dir, "medical_report.pdf")
     pdf.output(pdf_output_path)
     return pdf_output_path
+
 
 def send_report():
     formatted_date = record.date.strftime('%Y-%m-%d %H:%M')

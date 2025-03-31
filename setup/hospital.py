@@ -1,11 +1,13 @@
 #!/usr/bin/env python3
 
+import os
+import uuid
+import time
 from sqlalchemy import create_engine, Column, String, Integer, ForeignKey, Date, DateTime
 from sqlalchemy.orm import declarative_base, sessionmaker, relationship
 from sqlalchemy.exc import IntegrityError
-from datetime import datetime, timezone 
-import os
-import uuid
+from datetime import datetime, timezone
+
 
 # Get the directory of the current script
 script_dir = os.path.dirname(__file__)
@@ -57,6 +59,9 @@ class MedicalRecord(Base):
 Base.metadata.create_all(engine)
 
 class PatientRegistration:
+    '''
+    Class to handle Patient information
+    '''
     def __init__(self):
         pass
 
@@ -73,7 +78,7 @@ class PatientRegistration:
         gender = input("Gender: ")
         phone = input("Phone Number: ")
         dob = input("Date of Birth (YYYY-MM-DD): ")
-        registration_date = datetime.now().date()  # Use date directly
+        registration_date = datetime.now().date()
 
         # Create a Patient instance
         new_patient = Patient(
@@ -85,7 +90,7 @@ class PatientRegistration:
             email=email,
             gender=gender,
             phone=phone,
-            dob=datetime.strptime(dob, "%Y-%m-%d").date(),  # Convert to date
+            dob=datetime.strptime(dob, "%Y-%m-%d").date(),
             registration_date=registration_date
         )
 
@@ -105,6 +110,8 @@ class PatientRegistration:
             session.add(new_patient)
             session.commit()
             print("Patient registered successfully!")
+            print("Returning to the main menu...")
+            time.sleep(2)
         except IntegrityError:
             session.rollback()
             print("Error: Unable to register patient.")
@@ -112,7 +119,9 @@ class PatientRegistration:
             session.close()
 
     def read_patient(self):
-        """Reads and displays patient information from the database."""
+        """
+        Reads and displays patient information from the database.
+        """
         session = Session()
         first_name = input("Enter the patient's first name: ").upper()
         last_name = input("Enter the patient's last name: ").upper()
@@ -134,12 +143,21 @@ class PatientRegistration:
                 f"DOB: {patient.dob}\n"
                 f"REGISTRATION DATE: {patient.registration_date}"
             )
+            print("_________________________________________________________________")
+            print("Patient information reads succesfully")
+            print("Returning to the main menu...")
+            time.sleep(2)
         else:
             print("Patient not found.")
+            print("Returning to the main menu...")
+            time.sleep(2)
         session.close()
 
 
 class MedicalRecordManagement:
+    """
+        Medical Record Class
+    """
     def __init__(self):
         pass
 
@@ -164,7 +182,7 @@ class MedicalRecordManagement:
 
         if not diagnosis or not prescription or not doctor_name or not exam_name or not exam_no:
             print("Error! All the fields should not be empty")
-            return 
+            return
 
 
         new_record = MedicalRecord(
@@ -180,14 +198,19 @@ class MedicalRecordManagement:
             session.add(new_record)
             session.commit()
             print("Medical record added successfully.")
+            print("Returning to the main menu...")
+            time.sleep(2)
         except IntegrityError:
             session.rollback()
             print("Error: Unable to add medical record.")
+            time.sleep(1)
         finally:
             session.close()
 
     def read_medical_record(self):
-        """Reads and displays a medical record from the database."""
+        """
+            Reads and displays a medical record from the database.
+        """
         session = Session()
         first_name = input("Enter the patient's first name: ").strip().upper()
         last_name = input("Enter the patient's last name: ").strip().upper()
@@ -197,11 +220,15 @@ class MedicalRecordManagement:
 
         if not patient:
             print("ERROR! Patient not found. Please ensure the patient's details are correct.")
+            print("Returning to the main menu...")
+            time.sleep(2)
             return
 
         record = session.query(MedicalRecord).filter_by(patient_id=patient.id).first()
 
         if record:
+            print(f"Loading patient {patient.first_name} {patient.last_name} record")
+            time.sleep(2)
             print("____________________________________________________________")
             print("Medical Record:")
             print(
@@ -214,8 +241,14 @@ class MedicalRecordManagement:
                 f"Exam Order: {record.exam_no}\n"
                 f"Date: {record.date}"
             )
+            print("_______________________________________________________________")
+            print(f"Medical information for patient {patient.first_name} {Patient.last_name} reads successfully")
+            print("Returning to the main menu...")
+            time.sleep(2)
         else:
             print("Record not found.")
+            print("Returning to the main menu...")
+            time.sleep(2)
         session.close()
 
 if __name__ == "__main__":

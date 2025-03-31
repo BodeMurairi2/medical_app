@@ -10,8 +10,6 @@ from hospital import Patient, MedicalRecord
 from dotenv import load_dotenv
 from datetime import datetime
 
-
-
 #..........................connecting with the database..............
 
 # Get the directory of the current script
