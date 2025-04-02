@@ -100,14 +100,19 @@ class Notifications:
 
 
 def create_pdf(patient_record, record, formatted_date):
+    gender = patient_record.gender
+    if gender == "M":
+        receiver_gender = "Mr."
+    else:
+        receiver_gender = "Ms/Mrs."
     pdf = FPDF()
     pdf.add_page()
     pdf.set_font("Arial", size=12)
     pdf.cell(200, 10, txt="Hospital Saint Trinity", ln=True, align='C')
     pdf.ln(10)
-    pdf.cell(200, 10, txt=f"Dear Mr.{patient_record.first_name} {patient_record.last_name}", ln=True, align='L')
+    pdf.cell(200, 10, txt=f"Dear {receiver_gender} {patient_record.first_name} {patient_record.last_name}", ln=True, align='L')
     pdf.cell(200, 10, txt=f"National ID: {patient_record.national_id}", ln=True, align='L')
-    pdf.cell(200, 10, txt=f"Exam names: {record.exam_name}", ln=True, align='L')
+    pdf.cell(200, 10, txt=f"Exam name: {record.exam_name}", ln=True, align='L')
     pdf.cell(200, 10, txt=f"Exam number: {record.exam_no}", ln=True, align='L')
     pdf.cell(200, 10, txt=f"Diagnosis: {record.diagnosis}", ln=True, align='L')
     pdf.cell(200, 10, txt=f"Prescription: {record.prescription}", ln=True, align='L')
