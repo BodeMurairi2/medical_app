@@ -90,14 +90,21 @@ class SendingReminders:
 
 def send_reminder():
     formatted_date = record.date.strftime('%Y-%m-%d %H:%M')
+    gender = patient_record.gender
+    if gender == "M":
+        receiver_gender = "Mr."
+    else:
+        receiver_gender = "Ms/Mrs."
+
     reminders = SendingReminders(
         sender_email=os.getenv("sender"),
         receiver_email=patient_record.email,
         password=os.getenv("password"),
         subject=f"Reminder {formatted_date}",
-        body=f"Dear {patient_record.first_name} {patient_record.last_name}\n"
+        body=f"Dear {receiver_gender} {patient_record.first_name} {patient_record.last_name}\n"
         f"This is your daily reminder to take your medecation: \n"
         f"{record.prescription}\n"
+        "\n"
         "Hospital Saint Trinity",
     )
     reminders.sending_reminders()
